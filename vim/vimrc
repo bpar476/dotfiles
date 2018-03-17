@@ -1,0 +1,268 @@
+"Author: Ben Partridge
+
+syntax on
+set nocompatible 
+
+filetype on
+filetype plugin on
+
+set shell=/bin/bash
+
+"Easy ways of getting into normal mode
+inoremap kk <ESC>
+inoremap jj <ESC>
+let mapleader = "\<Space>"
+
+" Load vim-plug
+if empty(glob("~/.vim/autoload/plug.vim"))
+    execute '!mkdir -p ~/.vim/autoload'
+    execute '!curl -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+    :qall
+endif
+
+call plug#begin()
+"Git plugins
+Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim', { 'on': 'Gist' }
+"Git wrapper
+Plug 'tpope/vim-fugitive'
+"Themes
+Plug 'jacoborus/tender.vim'
+""Autocompletion of quotes, brackets, etc
+Plug 'Raimondi/delimitMate'
+"React development
+Plug 'pangloss/vim-javascript'
+Plug 'maxmellon/vim-jsx-pretty'
+"Angular development
+Plug 'leafgarland/typescript-vim'
+"File browser
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+"For commenting lines
+Plug 'scrooloose/nerdcommenter'
+"Autocomplete
+Plug 'Valloric/YouCompleteMe'
+"Easy file and buffer selection
+Plug 'ctrlp.vim'
+"For dealing with surrounds (Changing surrounding delimiters)
+Plug 'tpope/vim-surround' 
+"Need to find time to configure. For . key (Repeats sequences of commands done
+"by plugins
+Plug 'tpope/vim-repeat'
+"Syntax highlighting in handlebars templates
+Plug 'mustache/vim-mustache-handlebars'
+"Show errors, marks, etc in margin
+"Plug 'quickfixsigns'
+"Map , to the last motion
+Plug 'repeat-motion'
+"Manage TODOs
+"Plug 'TaskList.vim'
+"Syntax checker
+Plug 'neomake/neomake'
+"For easily moving through a file
+Plug 'EasyMotion'
+"Integration with tmux windows
+Plug 'christoomey/vim-tmux-navigator'
+"The silver searcher
+Plug 'rking/ag.vim'
+"For working with Ctags
+"Requires Exuberant Ctags
+Plug 'majutsushi/tagbar'
+"For swapping positions of text objects
+Plug 'tommcdo/vim-exchange'
+"Run tmux commands from vim
+Plug 'benmills/vimux'
+"Smart find and replace
+Plug 'tpope/vim-abolish'
+"Traverse the undo/redo tree
+Plug 'sjl/gundo.vim'
+"Helps with tab alignment
+Plug 'godlygeek/tabular'
+"ReplaceWithRegister
+Plug 'vim-scripts/ReplaceWithRegister'
+"Args on own line
+Plug 'FooSoft/vim-argwrap'
+"Reference docs
+Plug 'thinca/vim-ref'
+
+"Erlang
+Plug 'vim-erlang/vim-erlang-tags', { 'for': 'erlang' }
+"Plug 'vim-erlang/vim-erlang-compiler', { 'for': 'erlang' }
+Plug 'vim-erlang/vim-erlang-omnicomplete', { 'for': 'erlang' }
+Plug 'vim-erlang/vim-erlang-runtime', { 'for': 'erlang' }
+Plug 'vim-erlang/erlang-motions.vim', { 'for': 'erlang' }
+Plug 'vim-erlang/vim-dialyzer', { 'for': 'erlang' }
+Plug 'vim-erlang/vim-rebar', { 'for': 'erlang' }
+
+"Text objects
+Plug 'kana/vim-textobj-user'
+Plug 'b4winckler/vim-angry'
+Plug 'wellle/targets.vim'
+
+"Ultisnips
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
+call plug#end()
+
+set history=200
+
+"Indentation and tabs
+" Use two space tabs for html templates
+autocmd FileType html setlocal shiftwidth=2 tabstop=2
+autocmd FileType hbs setlocal shiftwidth=2 tabstop=2
+
+set expandtab
+set softtabstop=4
+set shiftwidth=4
+set autoindent
+
+"Indent entire document
+map <Leader><C-i> mzgg=G'z
+
+"Reload file if edits happen somewhere else
+set autoread
+
+"Statusline stuff
+"Display status line always
+set laststatus=2
+set ruler
+set showcmd
+set ch=1
+
+"Ignore some file types
+set wildmenu                    " Cool cmd completion
+set wildignorecase
+"%% is directory containing current file
+cabbr <expr> %% expand('%:p:h')
+set wildignore+=.hg,.git,.svn   " Version control
+set wildignore+=*.pyc           " Python byte code
+set wildignore+=*.beam           " Erlang byte code
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
+set wildignore+=*.class,*.o
+
+"Display whitespace
+set listchars=tab:->,trail:~,extends:>,precedes:<
+set list
+
+"Line numbers and limits
+set number                      " Show line numbers
+set cc=150                       " Ver line in 80 column
+set cursorline
+
+"Movement
+set scrolloff=20                 " Start scrolling n lines before border
+
+"Scroll wrapped lines normally
+noremap  <buffer> <silent> k gk
+noremap  <buffer> <silent> j gj
+
+"End of line
+inoremap <C-e> <C-o>$
+"Start of line
+inoremap <C-a> <C-o>^
+
+"Search
+set hlsearch                    " Highlight searches
+set incsearch                   " Highlight dynamically as pattern is typed
+set ignorecase                  " Ignore case of searches
+nmap <Leader>/ :nohlsearch<CR>
+
+"Allows undo after file is closed
+if exists("&undodir")
+    set undofile
+    set undodir=/tmp
+endif
+"Swap files and backup are super annoying. I save often
+set noswapfile
+set nobackup
+
+"Theme
+set background=dark
+set t_Co=256
+colorscheme tender
+
+"Set cursorcolumn
+nmap <Leader>scc :set cuc<CR>
+nmap <Leader>Scc :set nocuc<CR>
+
+"Buffers
+noremap <silent><Leader>bp :bprevious<CR>
+noremap <silent><Leader>bn :bnext<CR>
+noremap <silent><Leader>bc :bd<CR>
+
+"Tabs
+map <leader>tn :tabnew<cr>
+map <leader>to :tabonly<cr>
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabmove
+
+"Changlist
+noremap <silent><Leader>cp :cprev<CR>
+noremap <silent><Leader>cn :cnext<CR>
+
+"Quickfix
+noremap <Leader>q :copen<CR>
+noremap <Leader>Q :cclose<CR>
+
+"FileTypes
+"web
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html,hbs set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,htmldjango setlocal tabstop=4 softtabstop=2 shiftwidth=2 
+autocmd BufEnter *html map <F11> :setfiletype htmldjango<CR>
+autocmd BufEnter *html map <S-F11> :setfiletype django<CR>
+"Python
+let python_highlight_all = 1
+"Fix double indentation
+let g:pyindent_open_paren = '&sw'
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType python nnoremap <F5> :w<CR>:!python %<CR>
+autocmd FileType python setlocal complete-=i
+autocmd FileType python setlocal complete-=i
+autocmd FileType python setlocal dictionary=~/.vim/dict/python
+autocmd FileType python setlocal complete+=k
+autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 
+"Remove trailing whitespace upon saving python file
+autocmd BufWritePre *.py :%s/\s\+$//e
+
+"Make it easier to navigate windows
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+"Vimrc stuff
+nmap <silent> <Leader>ev :tabe ~/.vimrc<CR>
+nmap <silent> <Leader>sv :so ~/.vimrc<CR>
+nmap <silent> <Leader>bi :BundleInstall<CR>
+
+"Newline
+map <Leader>o o<Esc>
+map <Leader>O O<Esc>
+
+"Copy, paste and cut to system clipboard
+map <Leader>y "+y
+map <Leader>x "+d
+map <Leader>p :set paste<CR>"+p:set nopaste<CR>
+map <Leader>P :set paste<CR>"+P:set nopaste<CR>
+"Copy to end of line
+noremap Y y$
+
+"Repeat motion
+let repmo_key=","
+let repmo_revkey="\\"
+
+"Use ; as :
+nnoremap ; :
+
+"Saving
+nmap <Leader>w :w!<cr>
+"Sudo write
+cmap w!! w !sudo tee % >/dev/null
+
+"cd
+map <Leader>cd :cd %:p:h<cr>:pwd<cr>
+
+"Use local config if available
+if filereadable("~/.vimrc.local")
+    so ~/.vimrc.local
+endif
