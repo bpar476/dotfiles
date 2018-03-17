@@ -6,15 +6,21 @@
 ./tmux/install.sh
 
 # Symlink vimrc
-ln -s ./vim/vimrc ~/.vimrc
-# Clone vim theme
-
+if [ ! -e ~/.vimrc ] ; then
+    ln -sf $(pwd)/vim/vimrc ~/.vimrc
+fi
 # Install vim plugins
 vim +'PlugInstall --sync' +qa
 
 # Symlink nvim config
-if [ -d ~/.config/nvim ] ; then
+if [ ! -d ~/.config/nvim ] ; then
     mkdir ~/.config/nvim
 fi
-ln -s ./vim/nvimrc ~/.config/nvim/init.vim
+if [ ! -e ~/.config/nvim/init.vim ] ; then
+    ln -sf $(pwd)/vim/nvimrc ~/.config/nvim/init.vim
+fi
 
+# Symlink git config
+if [ ! -e ~/.gitconfig ] ; then
+    ln -sf $(pwd)/git/gitconfig ~/.gitconfig
+fi
