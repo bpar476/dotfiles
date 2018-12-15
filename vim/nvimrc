@@ -28,6 +28,19 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'jacoborus/tender.vim'
 "Go syntax highlighting
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"React development
+Plug 'pangloss/vim-javascript'
+Plug 'maxmellon/vim-jsx-pretty'
+"File browser
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+"For commenting lines
+Plug 'scrooloose/nerdcommenter'
+"Autocomplete
+Plug 'Valloric/YouCompleteMe'
+"For dealing with surrounds (Changing surrounding delimiters)
+Plug 'tpope/vim-surround' 
+"Integration with tmux windows
+Plug 'christoomey/vim-tmux-navigator'
 
 call plug#end()
 
@@ -39,8 +52,8 @@ autocmd FileType html setlocal shiftwidth=2 tabstop=2
 autocmd FileType hbs setlocal shiftwidth=2 tabstop=2
 
 set expandtab
-set softtabstop=4
-set shiftwidth=4
+set softtabstop=2
+set shiftwidth=2
 set autoindent
 
 "Indent entire document
@@ -136,7 +149,7 @@ noremap <Leader>Q :cclose<CR>
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType html,hbs set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,htmldjango setlocal tabstop=4 softtabstop=2 shiftwidth=2 
+autocmd FileType html,htmldjango, setlocal tabstop=4 softtabstop=2 shiftwidth=2 
 autocmd BufEnter *html map <F11> :setfiletype htmldjango<CR>
 autocmd BufEnter *html map <S-F11> :setfiletype django<CR>
 "Python
