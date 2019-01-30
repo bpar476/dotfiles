@@ -14,20 +14,12 @@ inoremap kk <ESC>
 inoremap jj <ESC>
 let mapleader = "\<Space>"
 
-" Load vim-plug
-if empty(glob("~/.vim/autoload/plug.vim"))
-    execute '!mkdir -p ~/.vim/autoload'
-    execute 'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    :qall
-endif
-
 "Load plugins
 call plug#begin('~/.local/share/nvim/plugged')
 "Theme
 Plug 'jacoborus/tender.vim'
-"Go syntax highlighting
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
+"Syntax Highlighting
 "React development
 Plug 'pangloss/vim-javascript'
 Plug 'maxmellon/vim-jsx-pretty'
@@ -35,18 +27,39 @@ Plug 'maxmellon/vim-jsx-pretty'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 "For commenting lines
 Plug 'scrooloose/nerdcommenter'
-"Autocomplete
-Plug 'Valloric/YouCompleteMe'
 "For dealing with surrounds (Changing surrounding delimiters)
 Plug 'tpope/vim-surround' 
 "Integration with tmux windows
 Plug 'christoomey/vim-tmux-navigator'
-"Rust syntax
-Plug 'rust-lang/rust.vim'
+
+"Autocomplete
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+" enable ncm2 for all buffers
+autocmd BufEnter * call ncm2#enable_for_buffer()
+" IMPORTANT: :help Ncm2PopupOpen for more information
+set completeopt=noinsert,menuone,noselect
+"Javascript completion
+Plug 'ncm2/ncm2-tern',  {'do': 'npm install'}
+"Python completion
+Plug 'ncm2/ncm2-jedi'
+"Go completion
+Plug 'ncm2/ncm2-go'
+"Rust completion
+Plug 'ncm2/ncm2-racer'
+"Util completion
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
+
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 call plug#end()
 
 set history=200
+
+"Use Shif+TAB to select autocomplete menu
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 
 "Indentation and tabs
 " Use two space tabs for html templates
@@ -138,36 +151,6 @@ map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove
 
-"Changlist
-noremap <silent><Leader>cp :cprev<CR>
-noremap <silent><Leader>cn :cnext<CR>
-
-"Quickfix
-noremap <Leader>q :copen<CR>
-noremap <Leader>Q :cclose<CR>
-
-"FileTypes
-"web
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html,hbs set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,htmldjango, setlocal tabstop=4 softtabstop=2 shiftwidth=2 
-autocmd BufEnter *html map <F11> :setfiletype htmldjango<CR>
-autocmd BufEnter *html map <S-F11> :setfiletype django<CR>
-"Python
-let python_highlight_all = 1
-"Fix double indentation
-let g:pyindent_open_paren = '&sw'
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType python nnoremap <F5> :w<CR>:!python %<CR>
-autocmd FileType python setlocal complete-=i
-autocmd FileType python setlocal complete-=i
-autocmd FileType python setlocal dictionary=~/.vim/dict/python
-autocmd FileType python setlocal complete+=k
-autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 
-"Remove trailing whitespace upon saving python file
-autocmd BufWritePre *.py :%s/\s\+$//e
-
 "Make it easier to navigate windows
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -175,9 +158,9 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 "Vimrc stuff
-nmap <silent> <Leader>ev :tabe ~/.vimrc<CR>
-nmap <silent> <Leader>sv :so ~/.vimrc<CR>
-nmap <silent> <Leader>bi :BundleInstall<CR>
+nmap <silent> <Leader>ev :tabe ~/.config/nvim/init.vim<CR>
+nmap <silent> <Leader>sv :so ~/.config/nvim/init.vim<CR>
+nmap <silent> <Leader>pi :PlugInstall<CR>
 
 "Newline
 map <Leader>o o<Esc>
@@ -190,10 +173,6 @@ map <Leader>p :set paste<CR>"+p:set nopaste<CR>
 map <Leader>P :set paste<CR>"+P:set nopaste<CR>
 "Copy to end of line
 noremap Y y$
-
-"Repeat motion
-let repmo_key=","
-let repmo_revkey="\\"
 
 "Use ; as :
 nnoremap ; :
