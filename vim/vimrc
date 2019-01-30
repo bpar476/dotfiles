@@ -38,10 +38,6 @@ Plug 'leafgarland/typescript-vim'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 "For commenting lines
 Plug 'scrooloose/nerdcommenter'
-"Autocomplete
-Plug 'Valloric/YouCompleteMe'
-"Easy file and buffer selection
-Plug 'ctrlp.vim'
 "For dealing with surrounds (Changing surrounding delimiters)
 Plug 'tpope/vim-surround' 
 "Need to find time to configure. For . key (Repeats sequences of commands done
@@ -49,16 +45,10 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 "Syntax highlighting in handlebars templates
 Plug 'mustache/vim-mustache-handlebars'
-"Show errors, marks, etc in margin
-"Plug 'quickfixsigns'
-"Map , to the last motion
-Plug 'repeat-motion'
 "Manage TODOs
 "Plug 'TaskList.vim'
 "Syntax checker
 Plug 'neomake/neomake'
-"For easily moving through a file
-Plug 'EasyMotion'
 "Integration with tmux windows
 Plug 'christoomey/vim-tmux-navigator'
 "The silver searcher
