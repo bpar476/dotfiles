@@ -41,6 +41,8 @@ Plug 'Valloric/YouCompleteMe'
 Plug 'tpope/vim-surround' 
 "Integration with tmux windows
 Plug 'christoomey/vim-tmux-navigator'
+"Rust syntax
+Plug 'rust-lang/rust.vim'
 
 call plug#end()
 
