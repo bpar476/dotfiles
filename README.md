@@ -6,3 +6,6 @@
 
 ## Installation
 Run the install script from this directory
+
+### TODO 
+Write readmes for individual directories
