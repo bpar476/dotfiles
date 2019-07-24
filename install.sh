@@ -14,12 +14,19 @@ echo "------------------------------------------"
 ln -sf $(pwd)/vim/vimrc ~/.vimrc || echo "Error creating vimrc symlink"
 # Install vim plugins
 vim +'PlugInstall --sync' +qa || echo "Unable to install vim plugins"
+echo ""
 
+echo "Setting up Neovim"
+echo "------------------------------------------"
 # Symlink nvim config
 if [ ! -d ~/.config/nvim ] ; then
-    mkdir ~/.config/nvim
+    mkdir -p ~/.config/nvim
 fi
 ln -sf $(pwd)/vim/nvimrc ~/.config/nvim/init.vim
+# Install vim-plug for neovim
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+nvim +'PlugInstall --sync' +qa || echo "Unable to install vim plugins"
 echo ""
 
 # Fill in git config template
