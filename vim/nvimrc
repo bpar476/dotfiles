@@ -17,7 +17,7 @@ let mapleader = "\<Space>"
 "Load plugins
 call plug#begin('~/.local/share/nvim/plugged')
 "Theme
-Plug 'jacoborus/tender.vim'
+Plug 'dracula/vim', { 'as': 'dracula' }
 
 "Syntax Highlighting
 "React development
@@ -55,6 +55,11 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 call plug#end()
+
+"Theme
+set background=dark
+set t_Co=256
+colorscheme dracula
 
 set history=200
 
@@ -101,7 +106,6 @@ set list
 
 "Line numbers and limits
 set number                      " Show line numbers
-set cc=150                       " Ver line in 80 column
 set cursorline
 
 "Movement
@@ -131,11 +135,6 @@ endif
 set noswapfile
 set nobackup
 
-"Theme
-set background=dark
-set t_Co=256
-colorscheme tender
-
 "Set cursorcolumn
 nmap <Leader>scc :set cuc<CR>
 nmap <Leader>Scc :set nocuc<CR>
@@ -161,6 +160,7 @@ map <C-l> <C-w>l
 nmap <silent> <Leader>ev :tabe ~/.config/nvim/init.vim<CR>
 nmap <silent> <Leader>sv :so ~/.config/nvim/init.vim<CR>
 nmap <silent> <Leader>pi :PlugInstall<CR>
+nmap <silent> <Leader>pc :PlugClean<CR>
 
 "Newline
 map <Leader>o o<Esc>
