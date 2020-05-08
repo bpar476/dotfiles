@@ -5,5 +5,9 @@
 	default = simple
 [core]
 	editor = nvim
-[alias]
-	up = "!git remote update -p; git merge --ff-only @{u}"
+[color]
+        ui = true
+[color "status"]
+        added = magenta bold
+        changed = cyan
+        untracked = blue dim
