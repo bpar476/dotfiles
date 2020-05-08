@@ -27,7 +27,20 @@ ln -sf $(pwd)/vim/nvimrc ~/.config/nvim/init.vim
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 nvim +'PlugInstall --sync' +qa || echo "Unable to install vim plugins"
-echo ""
+
+echo "installing coc plugins"
+
+for server in $(cat vim/cocservers.txt) ; do
+  nvim +":CocInstall ${server}" +qa || echo "Unable to install coc language server: ${server}"
+done
+
+ln -sf $(pwd)/vim/coc-settings.json ~/.config/nvim/coc-settings.json
+
+echo "nvim configured!"
+
+if [ $1 == "--no-git" ] ; then
+  exit 0
+fi
 
 # Fill in git config template
 echo "Configuring git"
