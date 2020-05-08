@@ -32,26 +32,10 @@ Plug 'scrooloose/nerdcommenter'
 "For dealing with surrounds (Changing surrounding delimiters)
 Plug 'tpope/vim-surround' 
 
-"Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-" enable ncm2 for all buffers
-"autocmd BufEnter * call ncm2#enable_for_buffer()
-" IMPORTANT: :help Ncm2PopupOpen for more information
-"set completeopt=noinsert,menuone,noselect
-"Javascript completion
-"Plug 'ncm2/ncm2-tern',  {'do': 'npm install'}
-"Python completion
-"Plug 'ncm2/ncm2-jedi'
-"Go completion
-"Plug 'ncm2/ncm2-go'
-"Rust completion
-"Plug 'ncm2/ncm2-racer'
-"Util completion
-"Plug 'ncm2/ncm2-bufword'
-"Plug 'ncm2/ncm2-path'
+"autoclose brackets, quotes, parenthesis
+Plug 'jiangmiao/auto-pairs'
 
-"Plug 'SirVer/ultisnips'
-"Plug 'honza/vim-snippets'
+Plug 'roxma/nvim-yarp'
 
 call plug#end()
 
