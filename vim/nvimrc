@@ -6,43 +6,44 @@ set nocompatible
 filetype on
 filetype plugin on
 
-set shell=/bin/bash
+set shell=/bin/zsh
 
 "Easy ways of getting into normal mode
 inoremap kk <ESC>
 inoremap jj <ESC>
 let mapleader = "\<Space>"
 
-"Load plugins
-call plug#begin('~/.local/share/nvim/plugged')
-"Theme
-Plug 'dracula/vim', { 'as': 'dracula' }
-"Completion Enging
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+call plug#begin("~/.vim/plugged")
+  " Theme
+  Plug 'dracula/vim'
 
-"=========Syntax Highlighting=================
-"React development
-Plug 'pangloss/vim-javascript'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'leafgarland/typescript-vim'
-"File browser
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-"For commenting lines
-Plug 'scrooloose/nerdcommenter'
-"For dealing with surrounds (Changing surrounding delimiters)
-Plug 'tpope/vim-surround' 
+  " Language Client
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
 
-"autoclose brackets, quotes, parenthesis
+
+  "=========Syntax Highlighting=================
+  " TypeScript Highlighting
+  Plug 'leafgarland/typescript-vim'
+  Plug 'peitalin/vim-jsx-typescript'
+  Plug 'pangloss/vim-javascript'
+
+
+  " File Explorer with Icons
+  Plug 'scrooloose/nerdtree'
+  Plug 'ryanoasis/vim-devicons'
+
+  " File Search
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
+
+  "For commenting lines
+  Plug 'scrooloose/nerdcommenter'
+  "For dealing with surrounds (Changing surrounding delimiters)
+  Plug 'tpope/vim-surround' 
+  "autoclose brackets, quotes, parenthesis
 Plug 'jiangmiao/auto-pairs'
-
-Plug 'roxma/nvim-yarp'
-
 call plug#end()
-
-"Theme
-set background=dark
-set t_Co=256
-colorscheme dracula
 
 "=========COC Language server optimisations==========="
 " TextEdit might fail if hidden is not set.
@@ -186,8 +187,66 @@ nnoremap <silent> <space>L  :<C-u>CocList outline<cr>
 
 "========END COC optimisations"
 
-"Use Shif+TAB to select autocomplete menu
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" Enable theming support
+if (has("termguicolors"))
+ set termguicolors
+endif
+
+"Theme
+set background=dark
+set t_Co=256
+colorscheme dracula
+
+"File browser config
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeIgnore = []
+let g:NERDTreeStatusline = ''
+" Automaticaly close nvim if NERDTree is only thing left open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Toggle
+nnoremap <silent> <C-b> :NERDTreeToggle<CR>
+
+"File search config
+nnoremap <C-p> :FZF<CR>
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit'
+  \}
+" requires silversearcher-ag
+" used to ignore gitignore files
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+
+" open new split panes to right and below
+set splitright
+set splitbelow
+
+" turn terminal to normal mode with escape
+tnoremap <Esc> <C-\><C-n>
+
+"Make it easier to navigate windows
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+"Tabs
+map <leader>tn :tabnew<cr>
+map <leader>to :tabonly<cr>
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabmove
+
+" start terminal in insert mode
+au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+
+" open terminal on ctrl+;
+" uses zsh instead of bash
+function! OpenTerminal()
+  split term://zsh
+resize 10
+endfunction
+nnoremap <c-n> :call OpenTerminal()<CR>
 
 "Indentation and tabs
 " Use two space tabs for html templates
@@ -249,6 +308,7 @@ set incsearch                   " Highlight dynamically as pattern is typed
 set ignorecase                  " Ignore case of searches
 nmap <Leader>/ :nohlsearch<CR>
 
+
 "Allows undo after file is closed
 if exists("&undodir")
     set undofile
@@ -267,18 +327,6 @@ nmap <Leader>Scc :set nocuc<CR>
 noremap <silent><Leader>bp :bprevious<CR>
 noremap <silent><Leader>bn :bnext<CR>
 noremap <silent><Leader>bc :bd<CR>
-
-"Tabs
-map <leader>tn :tabnew<cr>
-map <leader>to :tabonly<cr>
-map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove
-
-"Make it easier to navigate windows
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
 
 "Vimrc stuff
 nmap <silent> <Leader>ev :tabe ~/.config/nvim/init.vim<CR>
