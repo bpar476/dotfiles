@@ -35,8 +35,16 @@ for server in $(cat vim/cocservers.txt) ; do
 done
 
 ln -sf $(pwd)/vim/coc-settings.json ~/.config/nvim/coc-settings.json
-
 echo "nvim configured!"
+
+FONTS_DIR="powerlinet-fonts"
+if [ -d $FONTS_DIR ]; then
+  echo "already installed fonts"
+else
+  echo "installing powerline fonts"
+  git clone https://github.com/powerline/fonts.git $FONTS_DIR
+  $FONTS_DIR/install.sh || echo "failed to install powerline fonts"
+fi
 
 if [ $1 == "--no-git" ] ; then
   exit 0
