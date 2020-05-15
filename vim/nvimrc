@@ -17,11 +17,10 @@ let mapleader = "\<Space>"
 
 call plug#begin("~/.vim/plugged")
   " Theme
-  Plug 'dracula/vim'
-
+  Plug 'dracula/vim', { 'as': 'dracula' }
   " Language Client
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
+  let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver', 'coc-eslint', 'coc-java']
 
 
   "=========Syntax Highlighting=================
