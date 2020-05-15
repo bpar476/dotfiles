@@ -45,7 +45,9 @@ call plug#begin("~/.vim/plugged")
   "For dealing with surrounds (Changing surrounding delimiters)
   Plug 'tpope/vim-surround' 
   "autoclose brackets, quotes, parenthesis
-Plug 'jiangmiao/auto-pairs'
+  Plug 'jiangmiao/auto-pairs'
+  "status line
+  Plug 'itchyny/lightline.vim'
 call plug#end()
 
 "=========COC Language server optimisations==========="
@@ -196,10 +198,12 @@ if (has("termguicolors"))
 endif
 
 "Theme
+colorscheme dracula
 set background=dark
 set t_Co=256
-colorscheme dracula
-
+highlight Normal ctermbg=None
+"Don't need a mode bar because of lightline
+set noshowmode
 "File browser config
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
@@ -257,9 +261,8 @@ autocmd FileType html setlocal shiftwidth=2 tabstop=2
 autocmd FileType hbs setlocal shiftwidth=2 tabstop=2
 
 set expandtab
-set softtabstop=2
-set shiftwidth=2
-set autoindent
+set softtabstop=4
+set shiftwidth=4
 
 "Indent entire document
 map <Leader><C-i> mzgg=G'z
