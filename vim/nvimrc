@@ -236,7 +236,6 @@ endif
 colorscheme dracula
 set background=dark
 set t_Co=256
-highlight Normal ctermbg=None
 "Don't need a mode bar because of lightline
 set noshowmode
 "File browser config

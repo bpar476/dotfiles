@@ -11,7 +11,7 @@ echo ""
 # Symlink vimrc -f will update link if it exists
 echo "Setting up Vim"
 echo "------------------------------------------"
-ln -sf $(pwd)/vim/vimrc ~/.vimrc || echo "Error creating vimrc symlink"
+ln -sf $(pwd)/vim/vimrc $HOME/.vimrc || echo "Error creating vimrc symlink"
 # Install vim plugins
 vim +'PlugInstall --sync' +qa || echo "Unable to install vim plugins"
 echo ""
@@ -19,25 +19,20 @@ echo ""
 echo "Setting up Neovim"
 echo "------------------------------------------"
 # Symlink nvim config
-if [ ! -d ~/.config/nvim ] ; then
-    mkdir -p ~/.config/nvim
+if [ ! -d $HOME/.config/nvim ] ; then
+    mkdir -p $HOME/.config/nvim
 fi
-ln -sf $(pwd)/vim/nvimrc ~/.config/nvim/init.vim
+ln -sf $(pwd)/vim/nvimrc $HOME/.config/nvim/init.vim
 # Install vim-plug for neovim
-curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 nvim +'PlugInstall --sync' +qa || echo "Unable to install vim plugins"
 
-echo "installing coc plugins"
-
-for server in $(cat vim/cocservers.txt) ; do
-  nvim +":CocInstall ${server}" +qa || echo "Unable to install coc language server: ${server}"
-done
-
-ln -sf $(pwd)/vim/coc-settings.json ~/.config/nvim/coc-settings.json
+echo "configuring coc"
+ln -sf $(pwd)/vim/coc-settings.json $HOME/.config/nvim/coc-settings.json
 echo "nvim configured!"
 
-FONTS_DIR="powerlinet-fonts"
+FONTS_DIR="powerline-fonts"
 if [ -d $FONTS_DIR ]; then
   echo "already installed fonts"
 else
@@ -45,6 +40,16 @@ else
   git clone https://github.com/powerline/fonts.git $FONTS_DIR
   $FONTS_DIR/install.sh || echo "failed to install powerline fonts"
 fi
+
+echo "=========configuring oh-my-zsh==========="
+echo "installing oh-my-zsh"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+ln -sf $(pwd)/zsh/zshrc $HOME/.zshrc
+
+echo "configuring dracula theme..."
+DRACULA_ZSH_HOME=dracula
+git clone https://github.com/dracula/zsh.git $DRACULA_ZSH_HOME
+ln -s $DRACULA_ZSH_HOME/dracula.zsh-theme $HOME/.oh-my-zsh/themes/dracula.zsh-theme
 
 if [ $1 == "--no-git" ] ; then
   exit 0
@@ -63,4 +68,4 @@ echo "GIT CONFIG:"
 cat ./git/gitconfig
 
 # Symlink git config
-ln -sf $(pwd)/git/gitconfig ~/.gitconfig
+ln -sf $(pwd)/git/gitconfig $HOME/.gitconfig
