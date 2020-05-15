@@ -32,6 +32,8 @@ call plug#begin("~/.vim/plugged")
   Plug 'hail2u/vim-css3-syntax'
   Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
+  "==========End Syntax Highlighting=============
+
   " File Explorer with Icons
   Plug 'scrooloose/nerdtree'
   Plug 'ryanoasis/vim-devicons'
@@ -40,14 +42,18 @@ call plug#begin("~/.vim/plugged")
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
 
+  "status line
+  Plug 'itchyny/lightline.vim'
+
   "For commenting lines
   Plug 'scrooloose/nerdcommenter'
   "For dealing with surrounds (Changing surrounding delimiters)
   Plug 'tpope/vim-surround' 
   "autoclose brackets, quotes, parenthesis
   Plug 'jiangmiao/auto-pairs'
-  "status line
-  Plug 'itchyny/lightline.vim'
+  "autoclose XHTML tags
+  Plug 'alvan/vim-closetag'
+
 call plug#end()
 
 "=========COC Language server optimisations==========="
@@ -190,7 +196,35 @@ nnoremap <silent> <space>L  :<C-u>CocList outline<cr>
 " Resume latest coc list.
 "nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
-"========END COC optimisations"
+"========END COC optimisations===========
+
+"========closetag configuration===========
+" filenames like *.xml, *.html, *.xhtml, ...
+" These are the file extensions where this plugin is enabled.
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.tsx,*.jsx,*.xml'
+" filenames like *.xml, *.xhtml, ...
+" This will make the list of non-closing tags self-closing in the specified files.
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
+" filetypes like xml, html, xhtml, ...
+" These are the file types where this plugin is enabled.
+let g:closetag_filetypes = 'html,xhtml,phtml,jsx,tsx'
+" filetypes like xml, xhtml, ...
+" This will make the list of non-closing tags self-closing in the specified files.
+let g:closetag_xhtml_filetypes = 'xhtml,jsx'
+" integer value [0|1]
+" This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
+let g:closetag_emptyTags_caseSensitive = 1
+" dict
+" Disables auto-close if not in a "valid" region (based on filetype)
+let g:closetag_regions = {
+    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
+    \ 'javascript.jsx': 'jsxRegion',
+    \ }
+" Shortcut for closing tags, default is '>'
+let g:closetag_shortcut = '>'
+" Add > at current position without closing the current tag, default is ''
+let g:closetag_close_shortcut = '<leader>>'
+"========end closetag configuration===========
 
 " Enable theming support
 if (has("termguicolors"))
