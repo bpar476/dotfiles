@@ -29,6 +29,8 @@ call plug#begin("~/.vim/plugged")
   Plug 'peitalin/vim-jsx-typescript'
   Plug 'pangloss/vim-javascript'
 
+  Plug 'hail2u/vim-css3-syntax'
+  Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
   " File Explorer with Icons
   Plug 'scrooloose/nerdtree'
