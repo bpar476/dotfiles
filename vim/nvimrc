@@ -20,7 +20,7 @@ call plug#begin("~/.vim/plugged")
   Plug 'dracula/vim', { 'as': 'dracula' }
   " Language Client
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver', 'coc-eslint', 'coc-java', 'coc-jedi']
+  let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver', 'coc-eslint', 'coc-java', 'coc-jedi', 'coc-go']
 
 
   "=========Syntax Highlighting=================
