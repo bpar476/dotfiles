@@ -32,6 +32,8 @@ call plug#begin("~/.vim/plugged")
   Plug 'hail2u/vim-css3-syntax'
   Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
+  " golang highlighting and formatting
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'  }
   "==========End Syntax Highlighting=============
 
   " File Explorer with Icons
@@ -56,6 +58,8 @@ call plug#begin("~/.vim/plugged")
   "show git blame in statusline
   Plug 'zivyangll/git-blame.vim'
 call plug#end()
+
+let g:go_gopls_enabled = 0
 
 "=========COC Language server optimisations==========="
 " TextEdit might fail if hidden is not set.
