@@ -84,8 +84,23 @@ export GOPROXY=https://goproxy.io,direct
 # Set environment variable allow bypassing the proxy for specified repos (optional)
 export GOPRIVATE=github.com/immutable
 
+# Start docker
+if docker ps 2&>1 >> /dev/null; then
+else
+    echo "Starting docker server..."
+    sudo service docker start
+fi
+
+# NVM setup
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh"  ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion"  ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+NVM_DEFAULT="14.16.0"
+nvm use $NVM_DEFAULT
+
 # WSL Specific things
 export WINHOME=/mnt/c/Users/BenPartridge
+
 function pbcopy {
     tee <&0 | clip.exe
 }
