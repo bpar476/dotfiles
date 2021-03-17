@@ -55,6 +55,8 @@ alias 'gl'="git log"
 alias 'gpl'="git pull"
 alias 'gpr'="git pull --rebase"
 alias 'grhh'="git reset HEAD --hard"
+alias 'cpbranch'="git branch --show-current | pbcopy"
+alias 'gfz'="git branch | fzf | xargs git checkout"
 
 # Fuzzy find
 FZF_SCRIPT="$HOME/.fzf.zsh"
@@ -79,6 +81,8 @@ source ~/.zsh_aliases
 
 # Golang config
 export PATH=$PATH:/usr/local/go/bin
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
 # Set the GOPROXY environment variable
 export GOPROXY=https://goproxy.io,direct
 # Set environment variable allow bypassing the proxy for specified repos (optional)
@@ -107,4 +111,36 @@ function pbcopy {
 
 function pbpaste {
     powershell.exe Get-Clipboard | sed 's/\r$//' | sed -z '$ s/\n$//'
+}
+
+function gpsu {
+    current_branch=$(git branch --show-current)
+    remotes=$(git remote)
+    if [ $(echo $remotes | wc -l) -ne 1 ]; then
+        if [ $# -ne 1 ]; then
+            echo "Multiple remotes detected, please specify a remote as arg1"
+            return 1
+        fi
+        git push -u $1 $current_branch
+    else
+        git push -u $remotes $current_branch
+    fi
+
+    return $?
+}
+
+function expenv {
+    if [ $# -ne 1 ]; then
+        echo "Usage -- expenv <env_file>"
+        return 1
+    fi
+
+    if [ -f $1 ]; then
+        cat $1 | while read line; do
+            export $line
+        done
+    else
+        echo "arg1 must be an environment file"
+        return 1
+    fi
 }
