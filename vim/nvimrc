@@ -59,7 +59,15 @@ call plug#begin("~/.vim/plugged")
   Plug 'zivyangll/git-blame.vim'
 call plug#end()
 
+" vim-go custom configuration
+" Disable gopls, we will use gopls from coc
 let g:go_gopls_enabled = 0
+" Disable go_def mapping, we will use coc goto definition
+let g:go_def_mapping_enabled = 0
+" Run GoImports on save
+let g:go_imports_autosave = 1
+" Hotkeys
+au FileType go nmap <leader>tg <Plug>(go-test)
 
 "=========COC Language server optimisations==========="
 " TextEdit might fail if hidden is not set.
@@ -326,6 +334,7 @@ set wildignore+=*.pyc           " Python byte code
 set wildignore+=*.beam           " Erlang byte code
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.class,*.o
+set wildignore+=node_modules
 
 "Display whitespace
 set listchars=tab:->,trail:~,extends:>,precedes:<
