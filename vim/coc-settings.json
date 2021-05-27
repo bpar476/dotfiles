@@ -9,5 +9,12 @@
     "json",
     "javascriptreact",
     "typescript.tsx"
-  ]
+  ],
+  "languageserver": {
+    "sql": {
+      "command": "sql-language-server",
+      "args": ["up", "--method", "stdio"],
+      "filetypes": ["sql", "mysql"]
+    }
+  }
 }

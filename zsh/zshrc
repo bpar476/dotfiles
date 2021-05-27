@@ -27,7 +27,7 @@ source $ZSH/oh-my-zsh.sh
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git golang npm nvm zsh-syntax-highlighting)
+plugins=(git golang npm nvm zsh-syntax-highlighting gh)
 ####################################################################
 ####################################################################
 ##############                                        ##############
@@ -46,6 +46,7 @@ alias 'gp'="git push"
 alias 'gc'="git commit"
 alias 'gaa'="git add --all"
 alias 'gca'="git commit --amend"
+alias 'gco'="git checkout"
 alias 'gcm'="git commit -m"
 alias 'gd'="git diff"
 alias 'gdc'="git diff --cached"
@@ -57,6 +58,7 @@ alias 'gpr'="git pull --rebase"
 alias 'grhh'="git reset HEAD --hard"
 alias 'cpbranch'="git branch --show-current | pbcopy"
 alias 'gfz'="git branch | fzf | xargs git checkout"
+alias 'aws2=/usr/local/bin/aws'
 
 # Fuzzy find
 FZF_SCRIPT="$HOME/.fzf.zsh"
@@ -78,6 +80,8 @@ fi
 # Customisations
 # Load aliases
 source ~/.zsh_aliases
+# Device specific
+source ~/.zsh_additions
 
 # Golang config
 export PATH=$PATH:/usr/local/go/bin
@@ -87,6 +91,9 @@ export PATH=$PATH:$GOPATH/bin
 export GOPROXY=https://goproxy.io,direct
 # Set environment variable allow bypassing the proxy for specified repos (optional)
 export GOPRIVATE=github.com/immutable
+
+# Python config
+export PATH=$PATH:$HOME/.local/bin
 
 # Start docker
 if docker ps 2&>1 >> /dev/null; then
@@ -113,17 +120,42 @@ function pbpaste {
     powershell.exe Get-Clipboard | sed 's/\r$//' | sed -z '$ s/\n$//'
 }
 
+function infer_remote {
+    remotes=$(git remote)
+    remote_count=$(echo $remotes | wc -l)
+    if [ $remote_count -ne 1 ]; then
+            return -1
+    fi
+    echo $remotes
+}
+
 function gpsu {
     current_branch=$(git branch --show-current)
-    remotes=$(git remote)
-    if [ $(echo $remotes | wc -l) -ne 1 ]; then
+    remote=$(infer_remote)
+    if [[ $remote -eq -1 ]]; then
         if [ $# -ne 1 ]; then
             echo "Multiple remotes detected, please specify a remote as arg1"
             return 1
         fi
         git push -u $1 $current_branch
     else
-        git push -u $remotes $current_branch
+        git push -u $remote $current_branch
+    fi
+
+    return $?
+}
+
+function gdr {
+    current_branch=$(git branch --show-current)
+    remote=$(infer_remote)
+    if [[ $remote == -1 ]]; then
+        if [ $# -ne 1 ]; then
+            echo "Multiple remotes detected, please specify a remote as arg1"
+            return 1
+        fi
+        git diff $1/$current_branch
+    else
+        git diff $remote/$current_branch
     fi
 
     return $?

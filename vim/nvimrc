@@ -114,8 +114,7 @@ else
 endif
 
 " Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <silent> <Leader>ng <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
@@ -335,10 +334,6 @@ set wildignore+=*.beam           " Erlang byte code
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.class,*.o
 set wildignore+=node_modules
-
-"Display whitespace
-set listchars=tab:->,trail:~,extends:>,precedes:<
-set list
 
 "Hybrid line numbers and limits
 set number relativenumber
