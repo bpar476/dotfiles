@@ -28,37 +28,6 @@ source $ZSH/oh-my-zsh.sh
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git golang npm nvm zsh-syntax-highlighting gh)
-####################################################################
-####################################################################
-##############                                        ##############
-##############                  ALIASES               ##############
-##############                                        ##############
-####################################################################
-####################################################################
-
-alias ..="cd .."
-alias vi=nvim
-alias rzshrc="source ~/.zshrc"
-alias ezshrc="nvim $ZSHRC"
-
-alias 'gs'="git status"
-alias 'gp'="git push"
-alias 'gc'="git commit"
-alias 'gaa'="git add --all"
-alias 'gca'="git commit --amend"
-alias 'gco'="git checkout"
-alias 'gcm'="git commit -m"
-alias 'gd'="git diff"
-alias 'gdc'="git diff --cached"
-alias 'gap'="git add -p"
-alias 'ga'="git add"
-alias 'gl'="git log"
-alias 'gpl'="git pull"
-alias 'gpr'="git pull --rebase"
-alias 'grhh'="git reset HEAD --hard"
-alias 'cpbranch'="git branch --show-current | pbcopy"
-alias 'gfz'="git branch | fzf | xargs git checkout"
-alias 'aws2=/usr/local/bin/aws'
 
 # Fuzzy find
 FZF_SCRIPT="$HOME/.fzf.zsh"
@@ -108,17 +77,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion"  ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 NVM_DEFAULT="14.16.0"
 nvm use $NVM_DEFAULT
-
-# WSL Specific things
-export WINHOME=/mnt/c/Users/BenPartridge
-
-function pbcopy {
-    tee <&0 | clip.exe
-}
-
-function pbpaste {
-    powershell.exe Get-Clipboard | sed 's/\r$//' | sed -z '$ s/\n$//'
-}
 
 function infer_remote {
     remotes=$(git remote)
@@ -176,3 +134,16 @@ function expenv {
         return 1
     fi
 }
+
+# WSL Specific things
+if [[ "${PLATFORM}" == "WSL" ]]; then
+    export WINHOME=/mnt/c/Users/BenPartridge
+
+    function pbcopy {
+        tee <&0 | clip.exe
+    }
+
+    function pbpaste {
+        powershell.exe Get-Clipboard | sed 's/\r$//' | sed -z '$ s/\n$//'
+    }
+fi

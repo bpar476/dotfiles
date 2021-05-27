@@ -45,6 +45,7 @@ echo "=========configuring oh-my-zsh==========="
 echo "installing oh-my-zsh"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ln -sf $(pwd)/zsh/zshrc $HOME/.zshrc
+ln -sf $(pwd)/zsh/zsh_aliases $HOME/.zsh_aliases
 
 echo "configuring dracula theme..."
 DRACULA_ZSH_HOME=dracula
