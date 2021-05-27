@@ -47,9 +47,9 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 ln -sf $(pwd)/zsh/zshrc $HOME/.zshrc
 
 echo "configuring dracula theme..."
-DRACULA_ZSH_HOME=dracula
+DRACULA_ZSH_HOME="$(pwd)/dracula"
 git clone https://github.com/dracula/zsh.git $DRACULA_ZSH_HOME
-ln -s $DRACULA_ZSH_HOME/dracula.zsh-theme $HOME/.oh-my-zsh/themes/dracula.zsh-theme
+ln -sf $DRACULA_ZSH_HOME/dracula.zsh-theme $HOME/.oh-my-zsh/themes/dracula.zsh-theme
 
 if [ $1 == "--no-git" ] ; then
   exit 0
