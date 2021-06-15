@@ -251,7 +251,7 @@ set noshowmode
 "File browser config
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
-let g:NERDTreeIgnore = ['.git', '.idea', '.vscode']
+let g:NERDTreeIgnore = ['.git$', '.idea$', '.vscode$']
 let g:NERDTreeStatusline = ''
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -267,7 +267,7 @@ let g:fzf_action = {
   \}
 " requires silversearcher-ag
 " used to ignore gitignore files
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+let $FZF_DEFAULT_COMMAND = 'ag -l --hidden --nocolor -g ""'
 
 " open new split panes to right and below
 set splitright

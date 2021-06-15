@@ -15,6 +15,12 @@
       "command": "sql-language-server",
       "args": ["up", "--method", "stdio"],
       "filetypes": ["sql", "mysql"]
+    },
+    "terraform": {
+      "command": "terraform-lsp",
+      "filetypes": ["terraform", "tf"],
+      "initializationOptions": {},
+      "settings": {}
     }
   }
 }
