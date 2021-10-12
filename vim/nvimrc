@@ -52,8 +52,10 @@ call plug#begin("~/.vim/plugged")
   Plug 'ryanoasis/vim-devicons'
 
   " File Search
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  Plug 'junegunn/fzf.vim'
+  Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
   "status line
   Plug 'itchyny/lightline.vim'
@@ -271,15 +273,11 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 nnoremap <silent> <C-b> :NERDTreeToggle<CR>
 
 "File search config
-nnoremap <C-p> :FZF<CR>
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit'
-  \}
-" requires silversearcher-ag
-" used to ignore gitignore files
-let $FZF_DEFAULT_COMMAND = 'ag -l --hidden --nocolor -g ""'
+nnoremap <C-p> <cmd>Telescope find_files<cr>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fs <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 " open new split panes to right and below
 set splitright
