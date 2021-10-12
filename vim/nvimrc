@@ -26,6 +26,13 @@ call plug#begin("~/.vim/plugged")
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/nvim-cmp'
 
+  " Snippets
+  Plug 'hrsh7th/vim-vsnip'
+  Plug 'hrsh7th/vim-vsnip-integ' 
+  Plug 'rafamadriz/friendly-snippets'
+
+  " Outline
+  Plug 'liuchengxu/vista.vim'
 
   "=========Syntax Highlighting=================
   " TypeScript Highlighting
@@ -35,7 +42,7 @@ call plug#begin("~/.vim/plugged")
 
   Plug 'hail2u/vim-css3-syntax'
   Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-
+    
   " golang highlighting and formatting
   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'  }
   "==========End Syntax Highlighting=============
@@ -50,6 +57,26 @@ call plug#begin("~/.vim/plugged")
 
   "status line
   Plug 'itchyny/lightline.vim'
+  let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'filename', 'modified', 'method' ] ]
+      \ },
+      \ 'component_function': {
+      \   'method': 'NearestMethodOrFunction'
+      \ },
+      \ }
+  function! NearestMethodOrFunction() abort
+    return get(b:, 'vista_nearest_method_or_function', '')
+  endfunction
+
+  set statusline+=%{NearestMethodOrFunction()}
+  " By default vista.vim never run if you don't call it explicitly.
+  "
+  " If you want to show the nearest function in your statusline automatically,
+  " you can add the following line to your vimrc
+  autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
   "For commenting lines
   Plug 'scrooloose/nerdcommenter'
