@@ -1,6 +1,5 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 export ZSHRC=$HOME/.zshrc
 
 # Path to your oh-my-zsh installation.
@@ -27,7 +26,7 @@ source $ZSH/oh-my-zsh.sh
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git ansible aws brew golang npm nvm docker docker-compose zsh-syntax-highlighting)
+plugins=(git ansible aws brew golang npm nvm docker docker-compose)
 ####################################################################
 ####################################################################
 ##############                                        ##############
@@ -75,3 +74,5 @@ else
   export EDITOR='nvim'
 fi
 
+
+export PATH=$PATH:$HOME/.local/bin
