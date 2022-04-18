@@ -27,7 +27,7 @@ source $ZSH/oh-my-zsh.sh
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git golang npm nvm zsh-syntax-highlighting gh)
+plugins=(git golang npm nvm zsh-syntax-highlighting gh ripgrep)
 
 # Fuzzy find
 FZF_SCRIPT="$HOME/.fzf.zsh"
@@ -65,7 +65,7 @@ export GOPRIVATE=github.com/immutable
 export PATH=$PATH:$HOME/.local/bin
 
 # Start docker
-if docker ps 2&>1 >> /dev/null; then
+if docker ps 2>&1 >> /dev/null; then
 else
     echo "Starting docker server..."
     sudo service docker start
@@ -149,3 +149,4 @@ if [[ "${PLATFORM}" == "WSL" ]]; then
 fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
