@@ -49,8 +49,6 @@ fi
 # Customisations
 # Load aliases
 source ~/.zsh_aliases
-# Device specific
-source ~/.zsh_additions
 
 # Golang config
 export PATH=$PATH:/usr/local/go/bin
@@ -75,7 +73,7 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh"  ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion"  ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-NVM_DEFAULT="14.16.0"
+NVM_DEFAULT="16"
 nvm use $NVM_DEFAULT
 
 function infer_remote {
