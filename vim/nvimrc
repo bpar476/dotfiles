@@ -54,7 +54,6 @@ call plug#begin("~/.vim/plugged")
   Plug 'ryanoasis/vim-devicons'
 
   " File Search
-  Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -215,10 +214,6 @@ lua << EOF
     }
 
   end
-
-  -- To get fzf loaded and working with telescope, you need to call
-  -- load_extension, somewhere after setup function:
-  require('telescope').load_extension('fzf')
 EOF
 
 " Autocomplete
