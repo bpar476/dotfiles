@@ -6,52 +6,125 @@
 
 sudo apt install -y git openssl curl wget neovim tmux vim man-db zsh fuse3 libfuse2 python3 ruby build-essential dnsutils universal-ctags ca-certificates curl gnupg lsb-release
 
+# Setup Directories
+mkdir build
+mkdir -p $HOME/.local/bin
+
+if ! which nvim > /dev/null
+then
+    echo "Installing neovim"
+    pushd build
+
+    mkdir nvim
+    pushd nvim
+
+    wget https://github.com/neovim/neovim/releases/download/v0.8.2/nvim.appimage
+    sudo ln -s $(pwd)/nvim.appimage $HOME/.local/bin/nvim
+
+    popd
+    popd
+
+
+    echo "Setting up Neovim"
+    echo "------------------------------------------"
+    # Symlink nvim config
+    if [ ! -d $HOME/.config/nvim ] ; then
+        mkdir -p $HOME/.config/nvim
+    fi
+
+    ln -sf $(pwd)/vim/nvimrc $HOME/.config/nvim/init.vim
+    # Install vim-plug for neovim
+    curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    nvim +'PlugInstall --sync' +qa || echo "Unable to install vim plugins"
+fi
+
+if ! which docker > /dev/null
+then
+    echo "Installing docker engine"
+    sudo mkdir -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+    echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+    $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    sudo apt update
+    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+    # WSL issue
+    sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+    sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+fi
+
+if [[ $NVM_BIN == "" ]]
+then
+    echo "Setting up nvm"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+fi
+
+if ! which gh > /dev/null
+then
+    echo "Installing GitHub CLI"
+    type -p curl >/dev/null || sudo apt install curl -y
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+    sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+    sudo apt update
+    sudo apt install gh -y
+fi
+
+if ! [[ -f $HOME/.tmux.conf ]]; then
+    # Set up tmux config
+    echo "Running tmux install script"
+    echo "------------------------------------------"
+    ./tmux/install.sh || echo "Error while running tmux install script"
+    echo ""
+fi
+
+if ! [[ -f $HOME/.vimrc ]]; then
+    # Symlink vimrc -f will update link if it exists
+    echo "Setting up Vim"
+    echo "------------------------------------------"
+    ln -sf $(pwd)/vim/vimrc $HOME/.vimrc || echo "Error creating vimrc symlink"
+    # Install vim plugins
+    vim +'PlugInstall --sync' +qa || echo "Unable to install vim plugins"
+    echo ""
+fi
+
 # Install terraform language server
-wget https://github.com/juliosueiras/terraform-lsp/releases/download/v0.0.11-beta2/terraform-lsp_0.0.11-beta2_linux_amd64.tar.gz
-tar -xvf terraform-lsp_0.0.11-beta2_linux_amd64.tar.gz
-mv terraform-lsp $HOME/.local/bin/
+if ! which terraform-lsp > /dev/null
+then
+    pushd build
+    mkdir terraform-lsp
+    pushd terraform-lsp
 
-# Install vim plugins
-vim +'PlugInstall --sync' +qa || echo "Unable to install vim plugins"
-echo ""
+    wget https://github.com/juliosueiras/terraform-lsp/releases/download/v0.0.11-beta2/terraform-lsp_0.0.11-beta2_linux_amd64.tar.gz
+    tar -xvf terraform-lsp_0.0.11-beta2_linux_amd64.tar.gz
 
-echo "Setting up Neovim"
-echo "------------------------------------------"
-# Symlink nvim config
-if [ ! -d $HOME/.config/nvim ] ; then
-    mkdir -p $HOME/.config/nvim
-fi
-ln -sf $(pwd)/vim/nvimrc $HOME/.config/nvim/init.vim
-# Install vim-plug for neovim
-curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-nvim +'PlugInstall --sync' +qa || echo "Unable to install vim plugins"
+    mv terraform-lsp $HOME/.local/bin/
 
-echo "configuring coc"
-ln -sf $(pwd)/vim/coc-settings.json $HOME/.config/nvim/coc-settings.json
-echo "nvim configured!"
-
-FONTS_DIR="powerline-fonts"
-if [ -d $FONTS_DIR ]; then
-  echo "already installed fonts"
-else
-  echo "installing powerline fonts"
-  git clone https://github.com/powerline/fonts.git $FONTS_DIR
-  $FONTS_DIR/install.sh || echo "failed to install powerline fonts"
+    popd
+    popd
 fi
 
-echo "=========configuring oh-my-zsh==========="
-echo "installing oh-my-zsh"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-ln -sf $(pwd)/zsh/zshrc $HOME/.zshrc
-ln -sf $(pwd)/zsh/zsh_aliases $HOME/.zsh_aliases
 
-echo "configuring dracula theme..."
-DRACULA_ZSH_HOME="$(pwd)/dracula"
-git clone https://github.com/dracula/zsh.git $DRACULA_ZSH_HOME
-ln -sf $DRACULA_ZSH_HOME/dracula.zsh-theme $HOME/.oh-my-zsh/themes/dracula.zsh-theme
 
-if [ $1 == "--no-git" ] ; then
+if ! which zsh > /dev/null
+then
+    echo "Installing ZSH"
+    sudo apt install -y zsh
+    chsh -s $(which zsh)
+    echo "=========configuring oh-my-zsh==========="
+    echo "installing oh-my-zsh"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    ln -sf $(pwd)/zsh/zshrc $HOME/.zshrc
+    ln -sf $(pwd)/zsh/zsh_aliases $HOME/.zsh_aliases
+
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
+fi
+
+if [ ${1:-"git"} == "--no-git" ] ; then
   exit 0
 fi
 
