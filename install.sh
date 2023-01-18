@@ -2,16 +2,9 @@
 
 # Author: Ben Partridge
 
-# Set up tmux config
-echo "Running tmux install script"
-echo "------------------------------------------"
-./tmux/install.sh || echo "Error while running tmux install script"
-echo ""
+# Install basic utilities
 
-# Symlink vimrc -f will update link if it exists
-echo "Setting up Vim"
-echo "------------------------------------------"
-ln -sf $(pwd)/vim/vimrc $HOME/.vimrc || echo "Error creating vimrc symlink"
+sudo apt install -y git openssl curl wget neovim tmux vim man-db zsh fuse3 libfuse2 python3 ruby build-essential dnsutils universal-ctags ca-certificates curl gnupg lsb-release
 
 # Install terraform language server
 wget https://github.com/juliosueiras/terraform-lsp/releases/download/v0.0.11-beta2/terraform-lsp_0.0.11-beta2_linux_amd64.tar.gz
