@@ -88,7 +88,6 @@ Plug 'b4winckler/vim-angry'
 Plug 'wellle/targets.vim'
 
 "Ultisnips
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 call plug#end()
 
