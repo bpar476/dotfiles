@@ -9,6 +9,7 @@ filetype plugin on
 set encoding=UTF-8
 
 set shell=/bin/zsh
+set updatetime=350
 
 "Easy ways of getting into normal mode
 inoremap kk <ESC>
@@ -19,9 +20,21 @@ call plug#begin("~/.vim/plugged")
   " Theme
   Plug 'dracula/vim', { 'as': 'dracula' }
   " Language Client
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver', 'coc-eslint', 'coc-java', 'coc-jedi', 'coc-go']
+  Plug 'neovim/nvim-lspconfig' 
+  Plug 'onsails/lspkind-nvim'
+  " Autocomplete
+  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/nvim-cmp'
 
+  " Snippets
+  Plug 'hrsh7th/vim-vsnip'
+  Plug 'hrsh7th/cmp-vsnip'
+  Plug 'hrsh7th/vim-vsnip-integ' 
+  Plug 'rafamadriz/friendly-snippets'
+
+  " Outline
+  Plug 'liuchengxu/vista.vim'
 
   "=========Syntax Highlighting=================
   " TypeScript Highlighting
@@ -31,7 +44,9 @@ call plug#begin("~/.vim/plugged")
 
   Plug 'hail2u/vim-css3-syntax'
   Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-
+    
+  " golang highlighting and formatting
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'  }
   "==========End Syntax Highlighting=============
 
   " File Explorer with Icons
@@ -39,11 +54,32 @@ call plug#begin("~/.vim/plugged")
   Plug 'ryanoasis/vim-devicons'
 
   " File Search
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  Plug 'junegunn/fzf.vim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
   "status line
   Plug 'itchyny/lightline.vim'
+  let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'filename', 'modified', 'method' ] ]
+      \ },
+      \ 'component_function': {
+      \   'method': 'NearestMethodOrFunction'
+      \ },
+      \ }
+  function! NearestMethodOrFunction() abort
+    return get(b:, 'vista_nearest_method_or_function', '')
+  endfunction
+
+  set statusline+=%{NearestMethodOrFunction()}
+  " By default vista.vim never run if you don't call it explicitly.
+  "
+  " If you want to show the nearest function in your statusline automatically,
+  " you can add the following line to your vimrc
+  autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
   "For commenting lines
   Plug 'scrooloose/nerdcommenter'
@@ -55,149 +91,154 @@ call plug#begin("~/.vim/plugged")
   Plug 'alvan/vim-closetag'
   "show git blame in statusline
   Plug 'zivyangll/git-blame.vim'
+  "git
+  Plug 'tpope/vim-fugitive'  
 call plug#end()
 
-"=========COC Language server optimisations==========="
-" TextEdit might fail if hidden is not set.
-set hidden
-
-" Give more space for displaying messages.
-set cmdheight=2
-
-set history=200
-
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
-set updatetime=300
-
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
-
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
+"LSP config
 set signcolumn=yes
+lua << EOF
+  require'nvim-treesitter.configs'.setup {
+    ensure_installed = { "c", "lua", "go", "rust", "typescript" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+    sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
+    highlight = {
+      enable = true,              -- false will disable the whole extension
+      -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+      -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+      -- Using this option may slow down your editor, and you may see some duplicate highlights.
+      -- Instead of true it can also be a list of languages
+      additional_vim_regex_highlighting = false,
+    },
+  }
 
-" Use tab for trigger completion with characters ahead and navigate.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  local cmp = require'cmp'
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+  cmp.setup({
+    snippet = {
+      expand = function(args)
+        -- For `vsnip` user.
+        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` user.
+      end,
+    },
+    mapping = {
+      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.close(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
+      ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
+    },
+    sources = {
+      { name = 'nvim_lsp' },
+      { name = 'buffer' },
+      { name = 'vsnip' },
+    },
+    formatting = {
+        format = require("lspkind").cmp_format({
+            with_text = true,
+            menu = {
+                nvim_lsp = "[LSP]",
+            },
+        }),
+    },
+  })
 
-"Use CTRL+space to trigger completion.
-inoremap <silent><expr> <C-space> coc#refresh()
+  local nvim_lsp = require('lspconfig')
 
-" Use <cr> (Enter) to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+  -- Use an on_attach function to only map the following keys
+  -- after the language server attaches to the current buffer
+  local on_attach = function(client, bufnr)
+    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+ 
+    -- Mappings.
+    local opts = { noremap=true, silent=true }
 
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    buf_set_keymap('n', '<Leader>gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    buf_set_keymap('n', '<Leader>gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    buf_set_keymap('n', '<Leader>K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    buf_set_keymap('n', '<Leader>gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    buf_set_keymap('n', '<Leader><C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    buf_set_keymap('n', '<Leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+    buf_set_keymap('n', '<Leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    buf_set_keymap('n', '<Leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+    buf_set_keymap('n', '<Leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+    buf_set_keymap('n', '<Leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    buf_set_keymap('n', '<Leader>rf', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    buf_set_keymap('n', '<Leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+    buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+    buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
+    buf_set_keymap('n', '<Leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+  end
 
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+  vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = false,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+  })
 
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+  function PrintDiagnostics(opts, bufnr, line_nr, client_id)
+    opts = opts or {}
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
+    bufnr = bufnr or 0
+    line_nr = line_nr or (vim.api.nvim_win_get_cursor(0)[1] - 1)
 
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
+    local line_diagnostics = vim.lsp.diagnostic.get_line_diagnostics(bufnr, line_nr, opts, client_id)
+    if vim.tbl_isempty(line_diagnostics) then return end
 
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+    local diagnostic_message = ""
+    for i, diagnostic in ipairs(line_diagnostics) do
+      diagnostic_message = diagnostic_message .. string.format("%d: %s", i, diagnostic.message or "")
+      if i ~= #line_diagnostics then
+        diagnostic_message = diagnostic_message .. "\n"
+      end
+    end
+    --print only shows a single line, echo blocks requiring enter, pick your poison
+    print(diagnostic_message)
+  end
 
-" Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+  vim.cmd [[ autocmd CursorHold * lua PrintDiagnostics() ]]
 
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
+  -- Use a loop to conveniently call 'setup' on multiple servers and
+  -- map buffer local keybindings when the language server attaches
+  local servers = { 'gopls' }
+  for _, lsp in ipairs(servers) do
+    nvim_lsp[lsp].setup {
+      on_attach = on_attach,
+      capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+      flags = {
+        debounce_text_changes = 150,
+      }
+    }
 
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+  end
+EOF
 
-" Remap keys for applying codeAction to the current line.
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
+" vim-go custom configuration
+" Disable gopls, we will use gopls from lsp
+let g:go_gopls_enabled = 0
+" Disable go_def mapping, we will use lsp goto definition
+let g:go_def_mapping_enabled = 0
+" Run GoImports on save
+let g:go_imports_autosave = 1
+" Hotkeys
+au FileType go nmap <leader>tg <Plug>(go-test)
 
-" Introduce function text object
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
+"=== Vista Vim Overview Customisation===
+let g:vista#renderer#enable_icon = 1
 
-" Use <TAB> for selections ranges.
-" NOTE: Requires 'textDocument/selectionRange' support from the language server.
-" coc-tsserver, coc-python are the examples of servers that support it.
-nmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <TAB> <Plug>(coc-range-select)
+" The default icons can't be suitable for all the filetypes, you can extend it as you wish.
+let g:vista#renderer#icons = {
+\   "function": "\uf794",
+\   "variable": "\uf71b",
+\  }
 
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
-
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Find symbol of current document.
-nnoremap <silent> <space>L  :<C-u>CocList outline<cr>
-
-" Mappings using CoCList (Unused because <space> is my leader and has lots of
-" bindings):
-" Show all diagnostics.
-"nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions.
-"nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands.
-"nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Search workspace symbols.
-"nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-"nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-"nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list.
-"nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
-
-"========END COC optimisations===========
+let g:vista_fzf_preview = ['right:50%']
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 
 "========closetag configuration===========
 " filenames like *.xml, *.html, *.xhtml, ...
@@ -233,15 +274,14 @@ if (has("termguicolors"))
 endif
 
 "Theme
-colorscheme dracula
-set background=dark
+color dracula
 set t_Co=256
 "Don't need a mode bar because of lightline
 set noshowmode
 "File browser config
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
-let g:NERDTreeIgnore = ['.git', '.idea', '.vscode']
+let g:NERDTreeIgnore = ['.git$', '.idea$', '.vscode$']
 let g:NERDTreeStatusline = ''
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -249,15 +289,11 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 nnoremap <silent> <C-b> :NERDTreeToggle<CR>
 
 "File search config
-nnoremap <C-p> :FZF<CR>
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit'
-  \}
-" requires silversearcher-ag
-" used to ignore gitignore files
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+nnoremap <C-p> <cmd>Telescope find_files<cr>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fs <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 " open new split panes to right and below
 set splitright
@@ -323,10 +359,7 @@ set wildignore+=*.pyc           " Python byte code
 set wildignore+=*.beam           " Erlang byte code
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.class,*.o
-
-"Display whitespace
-set listchars=tab:->,trail:~,extends:>,precedes:<
-set list
+set wildignore+=node_modules
 
 "Hybrid line numbers and limits
 set number relativenumber

@@ -12,6 +12,12 @@ echo ""
 echo "Setting up Vim"
 echo "------------------------------------------"
 ln -sf $(pwd)/vim/vimrc $HOME/.vimrc || echo "Error creating vimrc symlink"
+
+# Install terraform language server
+wget https://github.com/juliosueiras/terraform-lsp/releases/download/v0.0.11-beta2/terraform-lsp_0.0.11-beta2_linux_amd64.tar.gz
+tar -xvf terraform-lsp_0.0.11-beta2_linux_amd64.tar.gz
+mv terraform-lsp $HOME/.local/bin/
+
 # Install vim plugins
 vim +'PlugInstall --sync' +qa || echo "Unable to install vim plugins"
 echo ""
@@ -45,6 +51,7 @@ echo "=========configuring oh-my-zsh==========="
 echo "installing oh-my-zsh"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ln -sf $(pwd)/zsh/zshrc $HOME/.zshrc
+ln -sf $(pwd)/zsh/zsh_aliases $HOME/.zsh_aliases
 
 echo "configuring dracula theme..."
 DRACULA_ZSH_HOME="$(pwd)/dracula"

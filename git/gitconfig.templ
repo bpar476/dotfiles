@@ -11,3 +11,8 @@
         added = magenta bold
         changed = red bold
         untracked = blue dim
+[alias]
+        fb = "!f() { git checkout -b feature/$1; }; f"
+        bb = "!f() { git checkout -b bugfix/$1; }; f"
+        hb = "!f() { git checkout -b hotfix/$1; }; f"
+        nb = "!f() { git checkout -b none/$1; }; f"
