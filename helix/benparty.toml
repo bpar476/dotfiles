@@ -1,0 +1,9 @@
+inherits = "autumn_night"
+
+type = { fg = "my_orange", modifiers = ["underlined"]}
+
+[palette]
+my_blue       = "#00AACC"
+my_orange     = "#FFAA11"
+my_yellow1    = "#FFEC11" # Functions, Methods, Attribute IDs, Headings
+my_green      = "#11FF33" # Strings, Inherited Class, Markup Code, Diff Inserted

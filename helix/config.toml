@@ -1,0 +1,19 @@
+theme = "benparty"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "block"
+
+[keys.normal]
+# General hx usage
+C-p = "file_picker"
+C-z = [":vsplit-new", ":config-open"]
+
+# Golang specific
+"space" = { t = { g = ":sh go test -short -timeout 5s $(pwd)/..."}}
+
+[keys.insert]
+j = { j = "normal_mode" }
+k = { k = "normal_mode" }
+
