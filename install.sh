@@ -41,6 +41,30 @@ then
     nvim +'PlugInstall --sync' +qa || echo "Unable to install vim plugins"
 fi
 
+if ! which aws > /dev/null
+then
+    pushd build
+    mkdir aws
+    pushd aws
+
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install    
+
+    popd
+    popd
+fi
+
+if ! which psql > /dev/null
+then
+    echo "Installing postgres"
+    sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+    sudo apt-get update
+    sudo apt-get -y install postgresql-client-15
+    sudo apt install -y libpq-dev
+fi
+
 if ! which docker > /dev/null
 then
     echo "Installing docker engine"
