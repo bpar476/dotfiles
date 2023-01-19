@@ -4,7 +4,9 @@
 
 # Install basic utilities
 
-sudo apt install -y git openssl curl wget neovim tmux vim man-db zsh fuse3 libfuse2 python3 ruby build-essential dnsutils universal-ctags ca-certificates curl gnupg lsb-release
+sudo apt install -y git openssl curl wget neovim tmux vim man-db zsh fuse3 libfuse2 python3 ruby build-essential dnsutils \
+    universal-ctags ca-certificates curl gnupg lsb-release libssl-dev automake autoconf libncurses5-dev xsltproc fop \
+    inotify-tools jq
 
 # Setup Directories
 mkdir build
