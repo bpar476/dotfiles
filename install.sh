@@ -125,6 +125,73 @@ if ! [[ -f $HOME/.vimrc ]]; then
     echo ""
 fi
 
+if ! rustc --version > /dev/null
+then
+    pushd build
+    mkdir rust
+    pushd rust
+
+    echo "Installing Rust"
+
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rustup-init
+    chmod +x rustup-init
+    ./rustup-init -y
+
+
+    popd
+    popd
+fi
+
+if ! which hx > /dev/null
+then
+    echo "Installing Helix Editor"
+
+    git clone https://github.com/helix-editor/helix $HOME/helix
+    pushd $HOME/helix
+    cargo install --locked --path helix-term
+    popd
+
+    mkdir -p ~/.config/helix/themes
+    ln -sf $HOME/helix/runtime $HOME/.config/helix/runtime
+    ln -sf $(pwd)/helix/benparty.toml $HOME/.config/helix/themes/benparty.toml
+    ln -sf $(pwd)/helix/config.toml $HOME/.config/helix/config.toml
+
+    echo "Installing language servers"
+
+    npm install -g vscode-html-languageservice
+    npm install -g vscode-css-languageservice
+
+    curl -L https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz | gunzip -c - > ~/.local/bin/rust-analyzer
+    chmod +x ~/.local/bin/rust-analyzer
+
+    go install golang.org/x/tools/gopls@latest
+
+    mkdir elixir-ls
+    pushd elixir-ls
+    wget https://github.com/elixir-lsp/elixir-ls/releases/download/v0.13.0/elixir-ls-1.14-25.1.zip
+    unzip elixir-ls-1.14-25.1.zip 
+
+    ln -sf $(pwd)/language_server.sh $HOME/.local/bin/elixir-ls 
+
+    popd
+fi
+
+if ! terraform version > /dev/null
+then
+    echo "Installing terraform"
+
+    wget -O- https://apt.releases.hashicorp.com/gpg | \
+    gpg --dearmor | \
+    sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+        https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+        sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+    sudo apt-get update
+    sudo apt-get install -y terraform
+fi
+
 # Install terraform language server
 if ! which terraform-lsp > /dev/null
 then
