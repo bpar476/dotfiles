@@ -78,9 +78,16 @@ then
     sudo apt update
     sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-    # WSL issue
-    sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
-    sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+    sudo groupadd docker
+    current_user = $(whoami)
+    sudo usermod -aG docker $current_user
+
+    # WSL issue - docker can't use new iptables
+    if [[ "${PLATFORM}" == "WSL" ]]
+    then
+        sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+        sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+    fi
 fi
 
 if [[ $NVM_BIN == "" ]]
