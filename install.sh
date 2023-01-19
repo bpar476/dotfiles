@@ -226,6 +226,37 @@ then
     go install golang.org/x/tools/cmd/goimports@latest
 fi
 
+if ! asdf version > /dev/null
+then
+    pushd build
+    mkdir asdf
+    pushd asdf
+
+    echo "Installing ASDF"
+
+    git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
+fi
+
+if ! which iex > /dev/null
+then
+    echo "Installing erlang"
+    # Install erlang/OTP
+    asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git
+    asdf install erlang 25.1
+    
+    asdf global erlang 25.1
+
+    echo "Installing elixir"
+    # Install elixir
+    asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
+
+    asdf install elixir 1.14-otp-25
+    asdf global  elixir 1.14-otp-25
+
+    # Install phoenix
+    mix local.hex
+    mix archive.install hex phx_new
+fi
 
 if ! which zsh > /dev/null
 then
