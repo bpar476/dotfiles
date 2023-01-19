@@ -59,6 +59,9 @@ export GOPROXY=https://goproxy.io,direct
 # Set environment variable allow bypassing the proxy for specified repos (optional)
 export GOPRIVATE=github.com/immutable
 
+# Rust config
+export PATH=$PATH:$HOME/.cargo/bin
+
 # Python config
 export PATH=$PATH:$HOME/.local/bin
 
