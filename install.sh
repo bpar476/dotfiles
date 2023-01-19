@@ -195,6 +195,7 @@ fi
 # Install terraform language server
 if ! which terraform-lsp > /dev/null
 then
+    echo "Installing terraform LSP"
     pushd build
     mkdir terraform-lsp
     pushd terraform-lsp
@@ -208,6 +209,22 @@ then
     popd
 fi
 
+if ! go version > /dev/null
+then
+    echo "Installing Go"
+
+    pushd build
+    mkdir golang
+    pushd golang
+
+    wget "https://go.dev/dl/go1.19.5.linux-amd64.tar.gz"
+    sudo tar -C "/usr/local" -xzf "go1.19.5.linux-amd64.tar.gz"
+
+    popd
+    popd
+
+    go install golang.org/x/tools/cmd/goimports@latest
+fi
 
 
 if ! which zsh > /dev/null
