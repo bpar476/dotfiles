@@ -31,6 +31,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Local config
 LOCAL_ZSHRC="$HOME/.zsh_local"
+touch $HOME/.zsh_local
 [ -f "$LOCAL_ZSHRC" ] && source "$LOCAL_ZSHRC"
 
 ## Custom zsh highlighting colours
