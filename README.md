@@ -1,10 +1,8 @@
 # Dotfiles
 
 ## Prerequisites
-* `curl`
 * `git`
-* ZSH must be installed. Follow the docs [here](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
-* Must be running on a Unix-based system (for now...)
+* Expects to be running on a linux distro that uses APT (including WSL)
 
 ## Acknowledgments
 * Vim config based off of kalda341's [vimrc](https://github.com/kalda341/dotfiles/blob/master/editors/vim/vimrc)
@@ -13,7 +11,10 @@
 ## Installation
 Run the install script from this directory
 
-### TODO 
-[ ] Install iterm and iterm themes
-[ ] Install `ag` - _the silver searcher_
-[ ] Windows support
+## WSL
+
+If you're using WSL, before you run the install script, run the following commands to configure WSL-specific installation options
+
+```shell
+echo "export PLATFORM=WSL" > "$HOME/.zsh_local"
+```
