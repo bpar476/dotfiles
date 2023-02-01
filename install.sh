@@ -115,6 +115,15 @@ if ! [[ -f $HOME/.tmux.conf ]]; then
     echo ""
 fi
 
+FONTS_DIR="powerline-fonts"
+if [ -d $FONTS_DIR ]; then
+  echo "already installed fonts"
+else
+  echo "installing powerline fonts"
+  git clone https://github.com/powerline/fonts.git $FONTS_DIR
+  $FONTS_DIR/install.sh || echo "failed to install powerline fonts"
+fi
+
 if ! [[ -f $HOME/.vimrc ]]; then
     # Symlink vimrc -f will update link if it exists
     echo "Setting up Vim"
@@ -189,24 +198,7 @@ then
         sudo tee /etc/apt/sources.list.d/hashicorp.list
 
     sudo apt-get update
-    sudo apt-get install -y terraform
-fi
-
-# Install terraform language server
-if ! which terraform-lsp > /dev/null
-then
-    echo "Installing terraform LSP"
-    pushd build
-    mkdir terraform-lsp
-    pushd terraform-lsp
-
-    wget https://github.com/juliosueiras/terraform-lsp/releases/download/v0.0.11-beta2/terraform-lsp_0.0.11-beta2_linux_amd64.tar.gz
-    tar -xvf terraform-lsp_0.0.11-beta2_linux_amd64.tar.gz
-
-    mv terraform-lsp $HOME/.local/bin/
-
-    popd
-    popd
+    sudo apt-get install -y terraform terraform-ls
 fi
 
 if ! go version > /dev/null
