@@ -264,6 +264,15 @@ then
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
 fi
 
+if ! which fish > /dev/null
+then
+    echo "Installing fish"
+    echo 'deb http://download.opensuse.org/repositories/shells:/fish:/release:/3/Debian_11/ /' | sudo tee /etc/apt/sources.list.d/shells:fish:release:3.list
+    curl -fsSL https://download.opensuse.org/repositories/shells:fish:release:3/Debian_11/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/shells_fish_release_3.gpg > /dev/null
+    sudo apt update
+    sudo apt install fish
+fi
+
 if [ ${1:-"git"} == "--no-git" ] ; then
   exit 0
 fi
