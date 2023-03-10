@@ -1,5 +1,6 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
+    set -x COLORTERM "truecolor"
     set -g fish_term24bit 1
 
     set PATH $PATH $HOME/.local/bin
@@ -22,9 +23,16 @@ if status is-interactive
     set NVM_DEFAULT "lts"
     nvm use $NVM_DEFAULT
 
+    set -x GPG_TTY (tty)
+
+    # Configures JAVA_HOME
+    . ~/.asdf/plugins/java/set-java-home.fish
+    set PATH $PATH $HOME/.gradle/gradle-8.0.2/bin
+
     # Prompt
     set -g hydro_color_error red
     set -g hydro_color_pwd magenta
-    set -g hydro_clor_git yellow
+    set -g hydro_color_git yellow
     set -g hydro_color_prompt green
+    set -g hydro_color_duration cyan
 end
