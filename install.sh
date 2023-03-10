@@ -273,6 +273,19 @@ then
     sudo apt install fish
 fi
 
+if ! which javac > /dev/null
+then
+    echo "Installing Java"
+    asdf plugin-add java https://github.com/halcyon/asdf-java.git
+    asdf install java temurin-19.0.2+7
+    asdf global java temurin-19.0.2+7
+
+    echo "Installing Gradle"
+    https://downloads.gradle-dn.com/distributions/gradle-8.0.2-bin.zip
+    mkdir -p $HOME/.gradle
+    unzip -d $HOME/.gradle gradle-8.0.2-bin.zip
+fi
+
 if [ ${1:-"git"} == "--no-git" ] ; then
   exit 0
 fi
