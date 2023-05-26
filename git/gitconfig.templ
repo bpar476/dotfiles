@@ -4,7 +4,7 @@
 [push]
 	default = simple
 [core]
-	editor = nvim
+	editor = hx
 [color]
         ui = true
 [color "status"]
@@ -16,3 +16,5 @@
         bb = "!f() { git checkout -b bugfix/$1; }; f"
         hb = "!f() { git checkout -b hotfix/$1; }; f"
         nb = "!f() { git checkout -b none/$1; }; f"
+		pf = "push --force"
+		cane = "commit --amend --no-edit"
