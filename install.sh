@@ -209,8 +209,8 @@ then
     mkdir golang
     pushd golang
 
-    wget "https://go.dev/dl/go1.19.5.linux-amd64.tar.gz"
-    sudo tar -C "/usr/local" -xzf "go1.19.5.linux-amd64.tar.gz"
+    wget "https://go.dev/dl/go1.20.5.linux-amd64.tar.gz"
+    sudo tar -C "/usr/local" -xzf "go1.20.5.linux-amd64.tar.gz"
 
     popd
     popd
@@ -271,6 +271,8 @@ then
     curl -fsSL https://download.opensuse.org/repositories/shells:fish:release:3/Debian_11/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/shells_fish_release_3.gpg > /dev/null
     sudo apt update
     sudo apt install fish
+
+    cp -R fish "$HOME/.config/fish"
 fi
 
 if ! which javac > /dev/null

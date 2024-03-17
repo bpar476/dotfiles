@@ -1,9 +1,73 @@
-inherits = "autumn_night"
+inherits = "heisenberg"
 
-type = { fg = "my_orange", modifiers = ["underlined"]}
+# Syntax highlighting
+"type" = { fg = "brightest_green", modifiers = ["italic"], underline = { style = "line" } }
+"type.builtin" = { fg = "brightest_green" }
+"constructor" = { fg = "lightning" }
+"constant" = { fg = "dojo" }
+"string" = { fg = "dark_green" }
+"string.regexp" = { fg = "lightning" }
+"string.special" = { fg = "lightning" }
+"comment" = { fg = "light_grey", modifiers = ["rapid_blink", "italic", "dim"] }
+"variable" = { fg = "bright_green" }
+"variable.parameter" = { fg = "lightning" }
+"label" = { fg = "dojo" }
+"punctuation" = { fg = "barium_green" }
+"keyword" = { fg = "dojo" }
+"keyword.control" = { fg = "lightning" }
+"keyword.directive" = { fg = "teddy_bear_pink" }
+"operator" = { fg = "dojo" }
+"function" = { fg = "dojo", modifiers = ["bold"] }
+"tag" = { fg = "crystal_blue" }
+"namespace" = { fg = "dojo" }
+"markup.heading" = { fg = "dojo" }
+"markup.list" = { fg = "vapor_yellow" }
+"markup.raw.block" = { bg = "background", fg = "orange" }
+"markup.link.url" = { fg = "crystal_blue" }
+"markup.link.text" = { fg = "vapor_yellow" }
+"markup.link.label" = { fg = "barium_green" }
+"markup.quote" = { fg = "vapor_yellow" }
+"diff.plus" = { fg = "bright_green" }
+"diff.minus" = { fg = "scarlett" }
+"diff.delta" = { fg = "dojo" }
+
+# Interface 
+"ui.background" = { bg = "black" }
+"ui.cursor" = { bg = "bright_green", fg = "gunmetal" }
+"ui.cursor.match" = { fg = "bright_green", modifiers = ["reversed"] }
+"ui.linenr" = { fg = "bright_green" }
+"ui.linenr.selected" = { fg = "bright_green", modifiers = ["reversed"] }
+"ui.statusline" = { fg = "bright_green", bg = "gunmetal" }
+"ui.popup" = { fg = "dark_green", bg = "black" }
+"ui.window" = { fg = "bright_green" }
+"ui.help" = { fg = "bright_green", bg = "background"}
+"ui.text" = { fg = "bright_green" }
+"ui.text.focus" = { bg = "background", fg = "barium_green" }
+"ui.textbright_greeninfo" = { fg = "lightning" }
+"ui.menu" = { fg = "zion", bg = "black" }
+"ui.menu.selected" = { bg = "dark_green", fg = "gunmetal" }
+"ui.selection" = { bg = "#1B0334" }
+"ui.selection.primary" = { bg = "gunmetal" }
+"warning" = { fg = "dojo" }
+"error" = { fg = "scarlett", modifiers = ["bold"] }
+"info" = { fg = "bright_green", modifiers = ["bold"] }
+"hint" = { fg = "bright_green", modifiers = ["bold"] }
+"diagnostic.hint" = { underline = {color = "scarlett", style = "curl" } }
+"diagnostic.info" = { underline = {color = "bright_green", style = "curl" } }
+"diagnostic.warning" = { underline = {color = "dojo", style = "curl" } }
+"diagnostic.error" = { underline = {color = "scarlett", style = "curl" } }
+"ui.bufferline" = { fg = "light_grey", bg = "black" }
+"ui.bufferline.active" = { fg = "foreground", bg = "dark_gray" }
 
 [palette]
-my_blue       = "#00AACC"
-my_orange     = "#FFAA11"
-my_yellow1    = "#FFEC11" # Functions, Methods, Attribute IDs, Headings
-my_green      = "#11FF33" # Strings, Inherited Class, Markup Code, Diff Inserted
+brightest_green = "#03ff8d"
+bright_green = "#13EE1F"
+dark_green   = "#09AF1D"
+black        = "#000A15"
+gunmetal     = "#27324C"
+light_grey   = "#829191"
+scarlett     = "#FF1313"
+dojo         = "#DFC77F"
+lightning    = "#3EF3ED"
+zion = "#c9cfd4"
+

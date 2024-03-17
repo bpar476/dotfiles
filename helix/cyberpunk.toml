@@ -1,0 +1,61 @@
+# Syntax highlighting
+"type" = { fg = "fuzz_blue", underline = { style = "line" } }
+"type.builtin" = { fg = "fuzz_blue" }
+"constructor" = { fg = "fuzz_blue" }
+"constant" = { fg = "robo_yellow", modifiers = ["bold"] }
+"string" = { fg = "aquamarine" }
+"string.regexp" = { fg = "robo_yellow", modifiers = ["dim"] }
+"comment" = { fg = "metal", modifiers = ["rapid_blink", "italic", "dim"] }
+"variable" = { fg = "skyscraper" }
+"variable.parameter" = { fg = "robo_yellow" }
+"label" = { fg = "robo_yellow" }
+"punctuation" = { fg = "skyscraper" }
+"keyword" = { fg = "katana_pink" }
+"operator" = { fg = "robo_yellow" }
+"function" = { fg = "katana_pink", modifiers = ["bold"] }
+"tag" = { fg = "skyscraper" }
+"namespace" = { fg = "fuzz_blue" }
+"markup.heading" = { fg = "fuzz_blue" }
+"markup.raw.block" = { bg = "midnight", fg = "katana_pink" }
+"markup.link" = { fg = "aquamarine" }
+"markup.quote" = { fg = "aquamarine" }
+"diff.plus" = { fg = "aquamarine" }
+"diff.minus" = { fg = "blood_red" }
+"diff.delta" = { fg = "robo_yellow" }
+
+# Interface 
+"ui.background" = { bg = "midnight" }
+"ui.cursor" = { bg = "aquamarine", fg = "midnight" }
+"ui.cursor.match" = { bg = "skyscraper", fg = "aquamarine" }
+"ui.linenr" = { fg = "skyscraper" }
+"ui.linenr.selected" = { bg = "katana_pink", fg = "robo_yellow" }
+"ui.statusline" = { fg = "katana_pink", bg = "night_horizon" }
+"ui.popup" = { fg = "skyscraper", bg = "night_horizon"}
+"ui.window" = { fg = "skyscraper" }
+"ui.help" = { fg = "katana_pink", bg = "midnight"}
+"ui.text" = { fg = "katana_pink" }
+"ui.text.focus" = { fg = "robo_yellow", bg = "katana_pink" }
+"ui.text.info" = { fg = "skyscraper" }
+"ui.menu" = { fg = "katana_pink", bg = "robo_yellow" }
+"ui.menu.selected" = { fg = "robo_yellow", bg = "katana_pink" }
+"ui.selection" = { fg = "fuzz_blue", bg = "night_horizon" }
+"ui.selection.primary" = { bg = "night_horizon" }
+"warning" = { fg = "robo_yellow" }
+"error" = { fg = "blood_red", modifiers = ["bold"] }
+"info" = { fg = "aquamarine", modifiers = ["bold"] }
+"hint" = { fg = "aquamarine", modifiers = ["bold"] }
+"diagnostic.hint" = { underline = {color = "blood_red", style = "curl" } }
+"diagnostic.info" = { underline = {color = "aquamarine", style = "curl" } }
+"diagnostic.warning" = { underline = {color = "robo_yellow", style = "curl" } }
+"diagnostic.error" = { underline = {color = "blood_red", style = "curl" } }
+
+[palette]
+night_horizon = "#2A0835"
+skyscraper    = "#811ADD"
+midnight      = "#0D1530"
+katana_pink   = "#F121B9"
+aquamarine    = "#00FFBB"
+blood_red     = "#F42D00"
+fuzz_blue     = "#09D4E7"
+robo_yellow   = "#FFEE80"
+metal         = "#A2B3B5"
