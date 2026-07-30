@@ -1,6 +1,6 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
-    set -x COLORTERM "truecolor"
+    set -x COLORTERM truecolor
     set -g fish_term24bit 1
 
     set PATH $PATH $HOME/.local/bin
@@ -12,15 +12,15 @@ if status is-interactive
     # Set environment variable allow bypassing the proxy for specified repos (optional)
     set -x GOPRIVATE github.com/immutable
     set PATH $PATH $HOME/.cargo/bin
-    
+
     # Start docker
-    if docker ps 2>&1 >> /dev/null
+    if docker ps 2>&1 >>/dev/null
     else
         echo "Starting docker server..."
         sudo service docker start
     end
 
-    set NVM_DEFAULT "lts"
+    set NVM_DEFAULT lts
     nvm use $NVM_DEFAULT
 
     set -x GPG_TTY (tty)
